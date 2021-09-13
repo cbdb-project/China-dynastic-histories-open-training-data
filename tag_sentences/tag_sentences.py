@@ -31,7 +31,8 @@ class text_operations:
         sentence = ""
         for char in data:
             sentence += char
-            if char in ["。", "！","？"]:
+            if char in ["。", "！","？", "，", "；"]:
+                if char in ["。", "！","？"]: sentence += "breaker"
                 output_list.append(sentence)
                 sentence = ""
         return output_list
@@ -59,14 +60,17 @@ class text_operations:
         end = "</pre></div>"
         header = header%filename
         output += header
-        line_begin = '<span class="markup manual unsolved info bordered" type="info" info_id="">'
-        line_end = '</span>'
+        tag_begin = '<span class="markup manual unsolved info" type="info" info_id="">'
+        tag_end = '</span>'
+        line_begin = '<span class="passage" type="passage" id="passage%s"><span class="commentContainer" value="[]"><span class="glyphicon glyphicon-comment" type="commentIcon" style="display:none" aria-hidden="true" data-markus-passageid="passage%s"></span></span></span>'
         for i in range(len(input_list)):
             if tag_status[i] == 1:
-                output += f"{line_begin}{input_list[i]}{line_end}"
+                output += f"{tag_begin}{input_list[i]}{tag_end}"
             else:
                 output += input_list[i]
-        output = output.replace("breaker", "<br /><br />") + end
+            if "breaker" in input_list[i]:
+                output += line_begin
+        output = output.replace("breaker", "\n\n") + end
         return output
 
 
