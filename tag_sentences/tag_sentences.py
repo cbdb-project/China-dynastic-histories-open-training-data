@@ -2,7 +2,7 @@ from os import listdir
 from os.path import isfile, join
 import uuid
 
-filename = filename = str(uuid.uuid4())
+filename = str(uuid.uuid4())
 class file_operations:
     def read_txt(self, input_file):
         output = ""
