@@ -90,10 +90,20 @@ class tag_entities:
         f_io = file_operations()
         file_reader = f_io.read_txt_to_list(input_entry_list, "\t")
         entry_list = file_reader(0)[1:]
+        hit_entry_list = []
+        continue_token = 0
         for entry_name in entry_list:
             if entry_name in section_content:
+                for previous_hit_entry in hit_entry_list:
+                    if entry_name in previous_hit_entry:
+                        continue_token = 1
+                        break
+                if continue_token == 1:
+                    continue_token = 0
+                    continue
                 output.append([config_tagid_start, sectionid, personid, name, type, subtype, entry_name, entry_name, current_date])
                 config_tagid_start+=1
+                hit_entry_list.append(entry_name)
         return output
     def tag_offices(sectionid, personid, name, section_content, current_date):
         global input_office_list
@@ -104,17 +114,19 @@ class tag_entities:
         f_io = file_operations()
         file_reader = f_io.read_txt_to_list(input_office_list, "\t")
         office_list = file_reader(0)[1:]
-        # office_list_for_re = ")|(".join(office_list)
-        # office_list_for_re = f'(({office_list_for_re}))'
-        # matches = re.findall(office_list_for_re, section_content)
-        # if matches!=[]:
-            # for single_match in matches:
-            #     content_word = single_match[0]
-            #     output.append([config_tagid_start, sectionid, personid, name, type, subtype, content_word, content_word, current_date])
-            #     config_tagid_start+=1
+        hit_office_list = []
+        continue_token = 0
         for office_title in office_list:
             if office_title in section_content:
+                for previous_hit_office in hit_office_list:
+                    if office_title in previous_hit_office:
+                        continue_token = 1
+                        break
+                if continue_token == 1:
+                    continue_token = 0
+                    continue
                 output.append([config_tagid_start, sectionid, personid, name, type, subtype, office_title, office_title, current_date])
+                hit_office_list.append(office_title)
                 config_tagid_start+=1
         return output
 
