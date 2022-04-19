@@ -65,7 +65,7 @@ class text_operations:
         line_end = ""
         passage_count = 0
         output += header + line_begin[7:]%(passage_count, passage_count)
-        passage_count += 0
+        passage_count += 1
         for i in range(len(input_list)):
             if tag_status[i] == 1:
                 output += f"{tag_begin}{input_list[i]}{tag_end}"
