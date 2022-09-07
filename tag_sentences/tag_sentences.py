@@ -55,20 +55,26 @@ class text_operations:
     
     def create_markus_xml(input_list,tag_status,filename):
         output = ""
-        header = r'''<div class="doc" markupfullname="false" markuppartialname="false" markupnianhao="false" markupofficaltitle="false" markupplacename="false" filename="%s" tag="{&quot;info&quot;:{&quot;color&quot;:&quot;#333399&quot;,&quot;buttonName&quot;:&quot;&amp;#(26377);&amp;#(20449);&amp;#(24687);&quot;,&quot;visible&quot;:true,&quot;status&quot;:&quot;bordered&quot;},&quot;fullName&quot;:{&quot;buttonName&quot;:&quot;&amp;#(22995);&amp;#(21517);&quot;,&quot;visible&quot;:true,&quot;color&quot;:&quot;#d9534f&quot;,&quot;status&quot;:&quot;&quot;},&quot;partialName&quot;:{&quot;buttonName&quot;:&quot;&amp;#(21029);&amp;#(21517);&quot;,&quot;visible&quot;:true,&quot;color&quot;:&quot;#f0ad4e&quot;,&quot;status&quot;:&quot;&quot;},&quot;placeName&quot;:{&quot;buttonName&quot;:&quot;&amp;#(22320);&amp;#(21517);&quot;,&quot;visible&quot;:true,&quot;color&quot;:&quot;#428bca&quot;,&quot;status&quot;:&quot;&quot;},&quot;officialTitle&quot;:{&quot;buttonName&quot;:&quot;&amp;#(23448);&amp;#(21517);&quot;,&quot;visible&quot;:true,&quot;color&quot;:&quot;#5bc0de&quot;,&quot;status&quot;:&quot;&quot;},&quot;timePeriod&quot;:{&quot;buttonName&quot;:&quot;&amp;#(26178);&amp;#(38291);&quot;,&quot;visible&quot;:true,&quot;color&quot;:&quot;green&quot;,&quot;status&quot;:&quot;&quot;},&quot;comparativeus&quot;:{&quot;buttonName&quot;:&quot;comparativus&quot;,&quot;visible&quot;:true,&quot;color&quot;:&quot;green&quot;,&quot;status&quot;:&quot;&quot;},&quot;dilaPerson&quot;:{&quot;buttonName&quot;:&quot;dilaPerson&quot;,&quot;visible&quot;:true,&quot;color&quot;:&quot;#d6616b&quot;,&quot;status&quot;:&quot;&quot;},&quot;dilaPlace&quot;:{&quot;buttonName&quot;:&quot;dilaPlace&quot;,&quot;visible&quot;:true,&quot;color&quot;:&quot;#6b6ecf&quot;,&quot;status&quot;:&quot;&quot;},&quot;koreanPerson&quot;:{&quot;buttonName&quot;:&quot;KPerson&quot;,&quot;visible&quot;:true,&quot;color&quot;:&quot;#b94a48&quot;,&quot;status&quot;:&quot;&quot;},&quot;koreanBook&quot;:{&quot;buttonName&quot;:&quot;KBook&quot;,&quot;visible&quot;:true,&quot;color&quot;:&quot;#428bca&quot;,&quot;status&quot;:&quot;&quot;},&quot;koreanPlace&quot;:{&quot;buttonName&quot;:&quot;KPlace&quot;,&quot;visible&quot;:true,&quot;color&quot;:&quot;#42ca86&quot;,&quot;status&quot;:&quot;&quot;},&quot;koreanOfficialTitle&quot;:{&quot;buttonName&quot;:&quot;KOfficialTitle&quot;,&quot;visible&quot;:true,&quot;color&quot;:&quot;#17becf&quot;,&quot;status&quot;:&quot;&quot;}}"><pre contenteditable="false" dir="ltr">'''
-        end = "</pre></div>"
+        header = r'''<div class="doc" markupfullname="false" markuppartialname="false" markupnianhao="false" markupofficaltitle="false" markupplacename="false" filename="%s" tag="{&quot;info&quot;:{&quot;color&quot;:&quot;#333399&quot;,&quot;buttonName&quot;:&quot;&amp;#(26377);&amp;#(20449);&amp;#(24687);&quot;,&quot;visible&quot;:true,&quot;status&quot;:&quot;bordered&quot;}}"><pre contenteditable="false" dir="ltr">'''
+        end = "</span></pre></div>"
         header = header%filename
-        output += header
         tag_begin = '<span class="markup manual unsolved info" type="info" info_id="">'
         tag_end = '</span>'
-        line_begin = '<span class="passage" type="passage" id="passage%s"><span class="commentContainer" value="[]"><span class="glyphicon glyphicon-comment" type="commentIcon" style="display:none" aria-hidden="true" data-markus-passageid="passage%s"></span></span></span>'
+        line_begin = '</span><span class="passage" type="passage" id="passage%d"><span class="commentContainer" value="[]"><span class="glyphicon glyphicon-comment" type="commentIcon" style="display:none" aria-hidden="true" data-markus-passageid="passage%d"></span></span>'
+        # line_end = "</span>"
+        line_end = ""
+        passage_count = 0
+        output += header + line_begin[7:]%(passage_count, passage_count)
+        passage_count += 1
         for i in range(len(input_list)):
             if tag_status[i] == 1:
                 output += f"{tag_begin}{input_list[i]}{tag_end}"
             else:
                 output += input_list[i]
             if "breaker" in input_list[i]:
-                output += line_begin
+                #output += line_begin
+                output = line_end + output + line_begin%(passage_count, passage_count)
+                passage_count += 1
         output = output.replace("breaker", "\n\n") + end
         return output
 
