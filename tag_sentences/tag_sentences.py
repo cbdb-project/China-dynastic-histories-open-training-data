@@ -19,13 +19,13 @@ class file_operations:
         output = [i for i in output if i]
         return output
 
-    def write_file(markus_xml, output_file):
+    def write_file(self, markus_xml, output_file):
         with open(output_file, "w+", encoding="utf-8") as f:
             f.write(markus_xml)
 
 
 class text_operations:
-    def create_list_from_text(data):
+    def create_list_from_text(self, data):
         output_list = []
         sentence = ""
         for char in data:
@@ -36,7 +36,8 @@ class text_operations:
                 sentence = ""
         return output_list
 
-    def tag_sentences_by_entity_lists(sentence_list, entity_list):
+    def tag_sentences_by_entity_lists(self, sentence_list, entity_list):
+        
         output_tag_status_list = []
         for sentence in sentence_list:
             find_entity = 0
@@ -53,7 +54,7 @@ class text_operations:
             output_tag_status_list.append(0)
         return output_tag_status_list
     
-    def create_markus_xml(input_list,tag_status,filename):
+    def create_markus_xml(self, input_list,tag_status,filename):
         output = ""
         header = r'''<div class="doc" markupfullname="false" markuppartialname="false" markupnianhao="false" markupofficaltitle="false" markupplacename="false" filename="%s" tag="{&quot;info&quot;:{&quot;color&quot;:&quot;#333399&quot;,&quot;buttonName&quot;:&quot;&amp;#(26377);&amp;#(20449);&amp;#(24687);&quot;,&quot;visible&quot;:true,&quot;status&quot;:&quot;bordered&quot;}}"><pre contenteditable="false" dir="ltr">'''
         end = "</span></pre></div>"
@@ -84,7 +85,7 @@ from os.path import isfile, join
 input_dir = "input"
 output_dir = "output"
 f_io = file_operations()
-text_tools = text_operations
+text_tools = text_operations()
 input_file_list = [f for f in listdir(input_dir) if isfile(join(input_dir, f))]
 for input_file in input_file_list:
     
@@ -98,7 +99,7 @@ for input_file in input_file_list:
     while "breakerbreaker" in input_txt:
         input_txt = input_txt.replace("breakerbreaker", "breaker")
     # break sentences to create a list
-    input_list = text_operations.create_list_from_text(input_txt)
+    input_list = text_operations().create_list_from_text(input_txt)
     # load all the entitie lists
     entity_list = f_io.read_entities_to_one_list("..\cbdb_entities_list")
     # assign tags for the sentences which includes any entities
@@ -106,5 +107,5 @@ for input_file in input_file_list:
     filename = input_file.split(".")[0]
     markus_xml = text_tools.create_markus_xml(input_list,tag_status,filename)
     output_filename = f'{output_dir}\{filename}.html'
-    file_operations.write_file(markus_xml, output_filename)
+    f_io.write_file(markus_xml, output_filename)
 
